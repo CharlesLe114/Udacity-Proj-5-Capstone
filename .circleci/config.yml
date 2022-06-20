@@ -59,11 +59,13 @@ jobs:
       - run:
           name: build and upload to docker hub
           command: |
-            docker build --tag=<< pipeline.parameters.image-name >> .
+            docker build --tag=$IMAGE_NAME .
             docker images
             docker login -u="lebaotoan" -p="$DOCKERHUB_PASSWORD"
             docker tag $IMAGE_NAME lebaotoan/$IMAGE_NAME
             docker push lebaotoan/$IMAGE_NAME
+          environment:
+            IMAGE_NAME: << pipeline.parameters.image-name >>
 
 workflows:
   app-creation:
