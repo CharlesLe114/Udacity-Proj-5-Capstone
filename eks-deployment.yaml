@@ -19,15 +19,16 @@ spec:
     metadata:
       labels:
         app: eks-deployment
-  containers:
-  - name: capstone-app
-    image: lebaotoan/udacity-capstone:v1.0
-    ports:
-    - name: http
-      containerPort: 80
-    imagePullPolicy: IfNotPresent
-  nodeSelector:
-    kubernetes.io/os: linux
+      spec:
+        containers:
+        - name: capstone-app
+          image: lebaotoan/udacity-capstone:v1.0
+          ports:
+          - name: http
+            containerPort: 80
+          imagePullPolicy: IfNotPresent
+        nodeSelector:
+          kubernetes.io/os: linux
 
 # ---
 # apiVersion: v1
