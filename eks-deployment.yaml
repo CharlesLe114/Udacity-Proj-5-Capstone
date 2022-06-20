@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-deployment
+  namespace: eks-deployment
+  labels:
+    app: eks-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: eks-deployment
+  # strategy:
+  #   type: RollingUpdate
+  #   rollingUpdate:
+  #     maxUnavailable: 50%
+  #     maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: eks-deployment
+      containers:
+      - name: capstone-app
+        image: lebaotoan/udacity-capstone:v1.0
+        ports:
+        - name: http
+          containerPort: 80
+        imagePullPolicy: IfNotPresent
+      nodeSelector:
+        kubernetes.io/os: linux
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: eks-deployment
+# spec:
+#   selector:
+#     app: eks-deployment
+#   type: LoadBalancer
+#   port: 8080
+#   targetPort: 8080
