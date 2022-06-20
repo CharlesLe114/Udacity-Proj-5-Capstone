@@ -4,7 +4,7 @@ from flask import Flask
 app = Flask(__name__)
 @app.route("/")
 def home():
-    html = f"<h3>This is capstone project</h3>"
+    html = f"<h3>I'm Le Bao Toan, This is capstone project for Udacity AWS DevOps program</h3>"
     return html.format(format)
 
 

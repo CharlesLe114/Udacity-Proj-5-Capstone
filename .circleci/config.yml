@@ -3,8 +3,12 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
+parameters:
+  image-name:
+    type: string
+    default: "capstone-project:latest"
 jobs:
-  build:
+  lint-check:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
@@ -44,4 +48,19 @@ jobs:
             . venv/bin/activate
             make lint
 
-
+  Docker-build:
+    docker:
+      - image:  circleci/golang:1.15
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 19.03.13
+      - run:
+          name: build and upload to docker hub
+          command: |
+            docker build --tag=<< pipeline.parameters.image-name >> .
+            docker images
+            docker login -u="lebaotoan" -p="$DOCKERHUB_PASSWORD"
+            docker tag $IMAGE_NAME lebaotoan/$IMAGE_NAME
+            docker push lebaotoan/$IMAGE_NAME
