@@ -48,7 +48,7 @@ jobs:
             . venv/bin/activate
             make lint
 
-  Docker-build:
+  docker-build:
     docker:
       - image:  circleci/golang:1.15
     working_directory: ~/repo
@@ -64,3 +64,10 @@ jobs:
             docker login -u="lebaotoan" -p="$DOCKERHUB_PASSWORD"
             docker tag $IMAGE_NAME lebaotoan/$IMAGE_NAME
             docker push lebaotoan/$IMAGE_NAME
+
+workflows:
+  app-creation:
+    jobs:
+      - lint-check
+      - docker-build:
+          requires: [lint-check]
