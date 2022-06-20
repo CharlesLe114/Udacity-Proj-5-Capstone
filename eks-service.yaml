@@ -6,6 +6,7 @@ metadata:
   labels:
     app: eks-deployment
 spec:
+  type: LoadBalancer
   selector:
     app: eks-deployment
   ports:
