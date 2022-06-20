@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: capstone-app
-        image: lebaotoan/udacity-capstone:v1.0
+        image: lebaotoan/capstone-project:latest
         ports:
         - name: http
           containerPort: 80
