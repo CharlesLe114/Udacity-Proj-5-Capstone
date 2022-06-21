@@ -10,11 +10,6 @@ spec:
   selector:
     matchLabels:
       app: eks-deployment
-  # strategy:
-  #   type: RollingUpdate
-  #   rollingUpdate:
-  #     maxUnavailable: 50%
-  #     maxSurge: 1
   template:
     metadata:
       labels:
@@ -29,15 +24,3 @@ spec:
         imagePullPolicy: IfNotPresent
       nodeSelector:
         kubernetes.io/os: linux
-
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: eks-deployment
-# spec:
-#   selector:
-#     app: eks-deployment
-#   type: LoadBalancer
-#   port: 8080
-#   targetPort: 8080
