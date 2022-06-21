@@ -63,7 +63,7 @@ jobs:
       - checkout
       - install-dependencies
       - save_cache:
-          key: dependencies-${{ CIRCLE_WORKFLOW_ID:0:7 }}
+          key: dependencies-$CIRCLE_WORKFLOW_ID
           paths:
             - /usr/local/bin/eksctl
             - /usr/local/bin/aws-iam-authenticator
@@ -80,7 +80,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-            - dependencies-${{ CIRCLE_WORKFLOW_ID:0:7 }}
+            - dependencies-$CIRCLE_WORKFLOW_ID
         - run:
             name: tool test
             command: |
