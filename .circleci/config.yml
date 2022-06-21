@@ -55,7 +55,8 @@ commands:
           command: |
             apt update
             apt install awscli -y
-            ls ../$(which aws)
+            cd $(which aws)
+            ls ../
 
 jobs:
   install-dependencies: 
