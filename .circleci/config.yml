@@ -55,7 +55,7 @@ commands:
           command: |
             apt update
             apt install awscli -y
-            ls /usr/bin
+            ls -l /usr/bin
 
 jobs:
   install-dependencies: 
