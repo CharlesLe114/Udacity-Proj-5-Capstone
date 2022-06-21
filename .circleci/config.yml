@@ -164,7 +164,7 @@ jobs:
       - run:
           name: deploy application
           command: |
-            aws eks update-kubeconfig --name k8s-demo
+            # aws eks update-kubeconfig --name k8s-demo
             kubectl create ns eks-deployment
             kubectl apply -f eks-deployment.yaml
             kubectl apply -f eks-service.yaml
@@ -194,7 +194,7 @@ workflows:
       #     requires: [lint-check]
       # - create-cluster:
       #     requires: [lint-check]
-      - kubectl-test
-          # requires: [create-cluster, docker-build]
-      # - cleanup:
+      # - kubectl-test:
+      #     requires: [create-cluster, docker-build]
+      - cleanup
       #     requires: [kubectl-test]
