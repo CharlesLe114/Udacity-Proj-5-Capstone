@@ -111,7 +111,8 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - kubernetes/install-kubectl
+      - kubernetes/install-kubectl:
+          kubectl-version: "1.23.6"
       - restore_cache:
           keys: [cluster-config]
       - run:
@@ -124,7 +125,7 @@ workflows:
       - lint-check
       - docker-build:
           requires: [lint-check]
-      - create-cluster:
-          requires: [lint-check]
+      # - create-cluster:
+      #     requires: [lint-check]
       - kubectl-test:
           requires: [create-cluster, docker-build]
