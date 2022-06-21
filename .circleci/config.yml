@@ -56,9 +56,25 @@ jobs:
       - install-dependencies
       - save_cache:
           paths:
-            - /usr/local/bin
-          key: dependencies
+            - /usr/local/bin/eksctl
+            - /usr/local/bin/aws-iam-authenticator
+            - /usr/local/bin/aws
+            - /usr/local/bin/kubectl
 
+          key: dependencies
+  test-kubectl:
+      docker:
+        - image: python:3.7.3-stretch
+      working_directory: ~/repo
+      steps:
+        - checkout
+        - restore_cache:
+            keys:
+            - dependencies
+        - run:
+            name: install dependencies
+            command: |
+              kubectl version --client
   lint-check:
     docker:
       # specify the version you desire here
@@ -176,7 +192,9 @@ jobs:
 workflows:
   app-creation:
     jobs:
-      # - install-dependencies
+      - install-dependencies
+      - test-kubectl:
+          requires: [install-dependencies]
       # - lint-check:
       #     requires: [install-dependencies]
       # - docker-build:
@@ -185,4 +203,4 @@ workflows:
       #     requires: [lint-check]
       # - kubectl-test:
       #     requires: [create-cluster, docker-build]
-      - cleanup
+      # - cleanup
