@@ -89,7 +89,7 @@ jobs:
             command: |
               kubectl version --client
               eksctl
-              aws
+              aws help
               aws-iam-authenticator
   lint-check:
     docker:
