@@ -57,6 +57,7 @@ jobs:
   install-dependencies: 
     docker:
       - image: python:3.7.3-stretch
+    working_directory: ~/repo
     steps:
       - checkout
       - install-dependencies
@@ -66,6 +67,7 @@ jobs:
             - /usr/local/bin/aws-iam-authenticator
             - /usr/local/bin/aws
             - /usr/local/bin/kubectl
+            - ~/repo/kubectl
 
           key: dependencies
 
