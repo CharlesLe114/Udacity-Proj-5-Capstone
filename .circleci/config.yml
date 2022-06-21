@@ -67,7 +67,7 @@ jobs:
           paths:
             - /usr/local/bin/eksctl
             - /usr/local/bin/aws-iam-authenticator
-            - /usr/local/bin/aws
+            - /usr/bin/aws
             - /usr/local/bin/kubectl
             # - ~/repo/kubectl
 
