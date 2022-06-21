@@ -60,24 +60,15 @@ jobs:
     steps:
       - checkout
       - install-dependencies
-      # - run:
-      #     name: install kubectl
-      #     command: |
-      #       curl -LO https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl
-      #       install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-      
-      - run: 
-          name: test kubectl
-          command: |
-            kubectl version --client
-      # - save_cache:
-      #     paths:
-      #       - /usr/local/bin/eksctl
-      #       - /usr/local/bin/aws-iam-authenticator
-      #       - /usr/local/bin/aws
-      #       - /usr/local/bin/kubectl
+      - save_cache:
+          paths:
+            - /usr/local/bin/eksctl
+            - /usr/local/bin/aws-iam-authenticator
+            - /usr/local/bin/aws
+            - /usr/local/bin/kubectl
 
-      #     key: dependencies
+          key: dependencies
+
   test-kubectl:
       docker:
         - image: python:3.7.3-stretch
@@ -90,6 +81,8 @@ jobs:
         - run:
             name: install dependencies
             command: |
+              printenv
+              ls /usr/local/bin
               kubectl version --client
   lint-check:
     docker:
@@ -209,8 +202,8 @@ workflows:
   app-creation:
     jobs:
       - install-dependencies
-      # - test-kubectl:
-      #     requires: [install-dependencies]
+      - test-kubectl:
+          requires: [install-dependencies]
       # - lint-check:
       #     requires: [install-dependencies]
       # - docker-build:
