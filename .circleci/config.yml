@@ -71,7 +71,7 @@ commands:
             command: |
               apt update
               apt install awscli -y
-
+jobs:
   lint-check:
     docker:
       # specify the version you desire here
@@ -183,6 +183,7 @@ commands:
       - run:
           name: cleanup
           command: eksctl delete cluster --region=us-east-1 --name=k8s-demo
+
 workflows:
   app-creation:
     jobs:
