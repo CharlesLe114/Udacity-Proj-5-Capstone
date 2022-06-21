@@ -82,11 +82,13 @@ jobs:
             keys:
             - dependencies-${CIRCLE_WORKFLOW_ID:0:7}
         - run:
-            name: install dependencies
+            name: tool test
             command: |
-              printenv
               ls -l /usr/local/bin
               kubectl version --client
+              eksctl
+              aws
+              aws-iam-authenticator
   lint-check:
     docker:
       # specify the version you desire here
