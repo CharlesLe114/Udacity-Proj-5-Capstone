@@ -72,7 +72,7 @@ jobs:
             - /usr/local/bin/aws-iam-authenticator
             - /usr/local/bin/aws
             # - /usr/local/aws-cli/v2/current/bin/aws
-            - /usr/local/aws-cli/*
+            - /usr/local/aws-cli
             - /usr/local/bin/kubectl
 
 
@@ -84,14 +84,15 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-            - v2-dependencies-test3
+            - v2-dependencies-test2
         - run:
             name: tool test
             command: |
               ls -l /usr/local/bin
               kubectl version --client
               eksctl
-              aws
+              /usr/local/aws-cli/v2/current/bin/aws
+              # aws
               aws-iam-authenticator
   lint-check:
     docker:
