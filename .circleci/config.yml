@@ -87,15 +87,9 @@ jobs:
         - run:
             name: tool test
             command: |
-              ls -l /usr/local
-              echo "-------------------------------------------------"
-              ls -l /usr/local/bin
-              echo "-------------------------------------------------"
-              /usr/local/aws-cli/v2/current/bin
               kubectl version --client
               eksctl
-              /usr/local/aws-cli/v2/current/bin/aws
-              which aws
+              aws
               aws-iam-authenticator
   lint-check:
     docker:
