@@ -50,8 +50,8 @@ commands:
       - run: 
           name: install awscli
           command: |
-            sudo apt update
-            sudo apt install awscli
+            apt update
+            apt install awscli
 
 jobs:
   install-dependencies: 
