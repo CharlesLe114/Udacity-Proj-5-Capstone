@@ -176,12 +176,13 @@ jobs:
 workflows:
   app-creation:
     jobs:
-      - install-dependencies
-      - lint-check:
-          requires: [install-dependencies]
-      - docker-build:
-          requires: [lint-check]
-      - create-cluster:
-          requires: [lint-check]
-      - kubectl-test:
-          requires: [create-cluster, docker-build]
+      # - install-dependencies
+      # - lint-check:
+      #     requires: [install-dependencies]
+      # - docker-build:
+      #     requires: [lint-check]
+      # - create-cluster:
+      #     requires: [lint-check]
+      # - kubectl-test:
+      #     requires: [create-cluster, docker-build]
+      - cleanup
