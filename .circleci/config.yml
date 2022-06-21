@@ -66,13 +66,12 @@ jobs:
       - checkout
       - install-dependencies
       - save_cache:
-          key: dependencies-<< pipeline.parameters.workflow-id >>
+          key: v2-dependencies
           paths:
             - /usr/local/bin/eksctl
             - /usr/local/bin/aws-iam-authenticator
             - /usr/bin/aws
             - /usr/local/bin/kubectl
-            # - ~/repo/kubectl
 
 
   test-kubectl:
