@@ -62,6 +62,7 @@ jobs:
       - checkout
       - install-dependencies
       - save_cache:
+          key: dependencies
           paths:
             - /usr/local/bin/eksctl
             - /usr/local/bin/aws-iam-authenticator
@@ -69,7 +70,6 @@ jobs:
             - /usr/local/bin/kubectl
             - ~/repo/kubectl
 
-          key: dependencies
 
   test-kubectl:
       docker:
