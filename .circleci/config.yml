@@ -50,12 +50,12 @@ commands:
             chmod +x ./aws-iam-authenticator
             mkdir -p /usr/local/bin && cp ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator && export PATH=$PATH:/usr/local/bin
 
-      # - run: 
-      #     name: install awscli
-      #     command: |
-      #       apt update
-      #       apt install awscli -y
-      #       which aws
+      - run: 
+          name: install awscli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install
 
 jobs:
   install-dependencies: 
@@ -65,25 +65,13 @@ jobs:
     steps:
       - checkout
       - install-dependencies
-      - run: 
-          name: install awscli
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            ./aws/install
-      
-      - run:
-          name: check awscli
-          command: |
-            which aws
-            aws --version
-      # - save_cache:
-      #     key: v2-dependencies
-      #     paths:
-      #       - /usr/local/bin/eksctl
-      #       - /usr/local/bin/aws-iam-authenticator
-      #       - /usr/bin/aws
-      #       - /usr/local/bin/kubectl
+      - save_cache:
+          key: v2-dependencies-{{ epoch }}
+          paths:
+            - /usr/local/bin/eksctl
+            - /usr/local/bin/aws-iam-authenticator
+            - /usr/bin/local/aws
+            - /usr/local/bin/kubectl
 
 
   test-kubectl:
@@ -94,7 +82,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-            - v2-dependencies
+            - v2-dependencies-{{ epoch }}
         - run:
             name: tool test
             command: |
@@ -221,8 +209,8 @@ workflows:
   app-creation:
     jobs:
       - install-dependencies
-      # - test-kubectl:
-      #     requires: [install-dependencies]
+      - test-kubectl:
+          requires: [install-dependencies]
       # - lint-check:
       #     requires: [install-dependencies]
       # - docker-build:
