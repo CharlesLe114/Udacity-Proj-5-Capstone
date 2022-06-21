@@ -82,7 +82,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-            - dependencies-<< pipeline.parameters.workflow-id >>
+            - v2-dependencies
         - run:
             name: tool test
             command: |
