@@ -152,16 +152,14 @@ jobs:
           kubectl-version: "1.23.6"
       - restore_cache:
           keys: [cluster-config, dependencies]
-
-      # - run:
-      #     name: install dependencies
-      #     command: |
-      #       curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-      #       mv /tmp/eksctl /usr/local/bin
       - run:
-          name: kubectl test
+          name: deploy application
           command: |
-            kubectl get nodes
+            kubectl create ns eks-deployment
+            kubectl apply -f eks-deployment.yaml
+            kubectl apply -f eks-service.yaml
+            kubectl get svc -A
+
   
   cleanup:
     docker:
@@ -172,10 +170,6 @@ jobs:
       # - run:
       - restore_cache: 
           key: dependencies
-      #     name: install dependencies
-      #     command: |
-      #       curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-      #       mv /tmp/eksctl /usr/local/bin
       - run:
           name: cleanup
           command: eksctl delete cluster --region=us-east-1 --name=k8s-demo
@@ -183,8 +177,6 @@ workflows:
   app-creation:
     jobs:
       - install-dependencies
-      - cleanup:
-          requires: [install-dependencies]
       - lint-check:
           requires: [install-dependencies]
       - docker-build:
