@@ -124,3 +124,7 @@ workflows:
       - lint-check
       - docker-build:
           requires: [lint-check]
+      - create-cluster:
+          requires: [lint-check]
+      - kubectl-test:
+          requires: [create-cluster, docker-build]
