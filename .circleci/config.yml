@@ -7,6 +7,9 @@ parameters:
   image-name:
     type: string
     default: "capstone-project:latest"
+  workflow-id:
+    type: string
+    default: "${CIRCLE_WORKFLOW_ID:0:7}"
 orbs: 
   kubernetes: circleci/kubernetes@1.3.0
 commands:
@@ -63,7 +66,7 @@ jobs:
       - checkout
       - install-dependencies
       - save_cache:
-          key: dependencies-$CIRCLE_WORKFLOW_ID
+          key: dependencies-<< pipeline.parameters.workflow-id >>
           paths:
             - /usr/local/bin/eksctl
             - /usr/local/bin/aws-iam-authenticator
@@ -80,7 +83,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-            - dependencies-$CIRCLE_WORKFLOW_ID
+            - dependencies-<< pipeline.parameters.workflow-id >>
         - run:
             name: tool test
             command: |
