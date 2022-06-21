@@ -186,7 +186,7 @@ workflows:
       - cleanup:
           requires: [install-dependencies]
       - lint-check:
-          reqires: [install-dependencies]
+          requires: [install-dependencies]
       - docker-build:
           requires: [lint-check]
       - create-cluster:
