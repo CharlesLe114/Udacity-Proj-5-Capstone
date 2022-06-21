@@ -53,7 +53,7 @@ commands:
 jobs:
   install-dependencies: 
     docker:
-      - image: cimg/python:3.10-node
+      - image: python:3.7.3-stretch
     steps:
       - checkout
       - install-dependencies
