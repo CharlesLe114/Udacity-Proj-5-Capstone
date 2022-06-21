@@ -82,7 +82,7 @@ jobs:
             name: install dependencies
             command: |
               printenv
-              ls /usr/local/bin
+              ls -l /usr/local/bin
               kubectl version --client
   lint-check:
     docker:
