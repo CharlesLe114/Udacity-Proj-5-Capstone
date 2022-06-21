@@ -20,7 +20,45 @@ commands:
           when: on_fail
           command: |
             eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo
+
+  install-dependencies:
+    description: Install dependencies needed for app deployment
+    parameters:
+      # Add parameter here   
+    steps:
+      - kubernetes/install-kubectl:
+          kubectl-version: "1.23.6" 
+      - run:
+          name: Install eksctl
+          command: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            mv /tmp/eksctl /usr/local/bin
+      
+      - run: 
+          name: install aws-iam-authenticator
+          command: |
+            curl -o aws-iam-authenticator https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator
+            chmod +x ./aws-iam-authenticator
+            mkdir -p /usr/local/bin && cp ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator && export PATH=$PATH:/usr/local/bin
+
+      - run: 
+          name: install awscli
+          command: |
+            sudo apt update
+            sudo apt install awscli
+
 jobs:
+  install-dependencies: 
+    docker:
+      - image: cimg/python:3.10-node
+    steps:
+      - checkout
+      - install-dependencies
+      - save_cache:
+          paths:
+            - /usr/local/bin
+          key: dependencies
+
   lint-check:
     docker:
       # specify the version you desire here
@@ -46,9 +84,6 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             make install
-            # Install hadolint
-            # wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
-            # chmod +x /bin/hadolint
       - save_cache:
           paths:
             - ./venv
@@ -86,11 +121,13 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: install dependencies
-          command: |
-            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-            mv /tmp/eksctl /usr/local/bin
+      # - run:
+      - restore_cache: 
+          key: dependencies
+      #     name: install dependencies
+      #     command: |
+      #       curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+      #       mv /tmp/eksctl /usr/local/bin
       - run:
           name: test eskctl
           command: eksctl help
@@ -114,18 +151,45 @@ jobs:
       - kubernetes/install-kubectl:
           kubectl-version: "1.23.6"
       - restore_cache:
-          keys: [cluster-config]
+          keys: [cluster-config, dependencies]
+
+      # - run:
+      #     name: install dependencies
+      #     command: |
+      #       curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+      #       mv /tmp/eksctl /usr/local/bin
       - run:
           name: kubectl test
           command: |
             kubectl get nodes
+  
+  cleanup:
+    docker:
+      - image: python:3.7.3-stretch
+    working_directory: ~/repo
+    steps:
+      - checkout
+      # - run:
+      - restore_cache: 
+          key: dependencies
+      #     name: install dependencies
+      #     command: |
+      #       curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+      #       mv /tmp/eksctl /usr/local/bin
+      - run:
+          name: cleanup
+          command: eksctl delete cluster --region=us-east-1 --name=k8s-demo
 workflows:
   app-creation:
     jobs:
-      - lint-check
+      - install-dependencies
+      - cleanup:
+          requires: [install-dependencies]
+      - lint-check:
+          reqires: [install-dependencies]
       - docker-build:
           requires: [lint-check]
-      # - create-cluster:
-      #     requires: [lint-check]
+      - create-cluster:
+          requires: [lint-check]
       - kubectl-test:
           requires: [create-cluster, docker-build]
