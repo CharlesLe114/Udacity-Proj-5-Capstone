@@ -66,12 +66,11 @@ jobs:
       - checkout
       - install-dependencies
       - save_cache:
-          key: v2-dependencies-test5
+          key: v2-dependencies-test6
           paths:
             - /usr/local/bin/eksctl
             - /usr/local/bin/aws-iam-authenticator
-            - /usr/local/bin/aws
-            - /usr/local/aws-cli/
+            - /usr/bin/aws
             - /usr/local/bin/kubectl
 
 
@@ -83,7 +82,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-            - v2-dependencies-test5
+            - v2-dependencies-test6
         - run:
             name: tool test
             command: |
