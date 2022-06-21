@@ -62,13 +62,13 @@ jobs:
       - checkout
       - install-dependencies
       - save_cache:
-          key: dependencies
+          key: dependencies-${CIRCLE_WORKFLOW_ID:0:7}
           paths:
             - /usr/local/bin/eksctl
             - /usr/local/bin/aws-iam-authenticator
             - /usr/local/bin/aws
             - /usr/local/bin/kubectl
-            - ~/repo/kubectl
+            # - ~/repo/kubectl
 
 
   test-kubectl:
@@ -79,7 +79,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-            - dependencies
+            - dependencies-${CIRCLE_WORKFLOW_ID:0:7}
         - run:
             name: install dependencies
             command: |
