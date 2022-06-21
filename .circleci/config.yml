@@ -50,12 +50,12 @@ commands:
             chmod +x ./aws-iam-authenticator
             mkdir -p /usr/local/bin && cp ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator && export PATH=$PATH:/usr/local/bin
 
-      - run: 
-          name: install awscli
-          command: |
-            apt update
-            apt install awscli -y
-            ls -l /usr/bin
+      # - run: 
+      #     name: install awscli
+      #     command: |
+      #       apt update
+      #       apt install awscli -y
+      #       ls -l /usr/bin
 
 jobs:
   install-dependencies: 
@@ -88,7 +88,7 @@ jobs:
             command: |
               kubectl version --client
               eksctl
-              aws help
+              # aws help
               aws-iam-authenticator
   lint-check:
     docker:
