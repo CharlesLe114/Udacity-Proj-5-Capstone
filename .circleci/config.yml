@@ -51,7 +51,7 @@ commands:
           name: install awscli
           command: |
             apt update
-            apt install awscli
+            apt install awscli -y
 
 jobs:
   install-dependencies: 
