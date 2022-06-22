@@ -190,8 +190,7 @@ jobs:
 workflows:
   app-creation:
     jobs:
-      - lint-check:
-          requires: [install-dependencies]
+      - lint-check
       - docker-build:
           requires: [lint-check]
       - create-cluster:
