@@ -187,25 +187,10 @@ jobs:
           name: cleanup
           command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo
 
-  cleanup-tmp:
-    docker:
-      - image: python:3.7.3-stretch
-    working_directory: ~/repo
-    steps:
-      - checkout
-      # - run:
-      - restore_cache: 
-          key: dependencies
-      - run:
-          name: cleanup
-          command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo
-
 workflows:
   app-creation:
     jobs:
-      - cleanup-tmp
-      - lint-check:
-          requires: [cleanup-tmp]
+      - lint-check
       - docker-build:
           requires: [lint-check]
       - create-cluster:
