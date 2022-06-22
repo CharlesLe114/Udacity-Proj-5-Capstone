@@ -146,7 +146,7 @@ jobs:
             eksctl create cluster --name k8s-demo --region $AWS_DEFAULT_REGION --nodegroup-name k8s-demo --nodes 2 --ssh-access --ssh-public-key udacity --managed
       - save_cache:
           paths: [~/.kube/config]
-          key: cluster-config
+          key: cluster-config-{{ checksum "~/.kube/config"  }}
       - destroy-environment
     
 
@@ -160,7 +160,9 @@ jobs:
       - install-aws-iam-authenticator
       - install-awscli
       - restore_cache:
-          keys: [cluster-config]
+          keys: 
+            - cluster-config-{{ checksum "~/.kube/config"  }}
+            - cluster-config-
       - run:
           name: deploy application
           command: |
@@ -183,18 +185,18 @@ jobs:
           key: dependencies
       - run:
           name: cleanup
-          command: eksctl delete cluster --region=us-east-1 --name=k8s-demo
+          command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo
 
 workflows:
   app-creation:
     jobs:
-      # - lint-check:
-      #     requires: [install-dependencies]
-      # - docker-build:
-      #     requires: [lint-check]
-      # - create-cluster:
-      #     requires: [lint-check]
-      # - kubectl-test:
-      #     requires: [create-cluster, docker-build]
-      - cleanup
-      #     requires: [kubectl-test]
+      - lint-check:
+          requires: [install-dependencies]
+      - docker-build:
+          requires: [lint-check]
+      - create-cluster:
+          requires: [lint-check]
+      - kubectl-test:
+          requires: [create-cluster, docker-build]
+      - cleanup:
+          requires: [kubectl-test]
