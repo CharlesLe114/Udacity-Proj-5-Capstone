@@ -144,9 +144,10 @@ jobs:
           name: create cluster
           command: |
             eksctl create cluster --name k8s-demo --region $AWS_DEFAULT_REGION --nodegroup-name k8s-demo --nodes 2 --ssh-access --ssh-public-key udacity --managed
-      - save_cache:
-          paths: [~/.kube/config]
-          key: cluster-config-{{ checksum "~/.kube/config"  }}
+      - persist_to_workspace:
+          root: ~/.kube
+          paths:
+            - config
       - destroy-environment
     
 
@@ -159,10 +160,9 @@ jobs:
       - install-kubectl
       - install-aws-iam-authenticator
       - install-awscli
-      - restore_cache:
-          keys: 
-            - cluster-config-{{ checksum "~/.kube/config"  }}
-            - cluster-config-
+      - install-eksctl
+      - attach_workspace:
+          at: ~/.kube
       - run:
           name: deploy application
           command: |
@@ -190,7 +190,9 @@ jobs:
 workflows:
   app-creation:
     jobs:
-      - lint-check
+      - cleanup
+      - lint-check:
+          requires: [cleanup]
       - docker-build:
           requires: [lint-check]
       - create-cluster:
