@@ -170,7 +170,7 @@ jobs:
             kubectl create ns eks-deployment
             kubectl apply -f eks-deployment.yaml
             kubectl apply -f eks-service.yaml
-            sleep(60)
+            sleep 1m
             kubectl get all -n eks-deployment
       - destroy-environment
 
