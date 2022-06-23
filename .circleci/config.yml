@@ -186,7 +186,7 @@ jobs:
           key: dependencies
       - run:
           name: cleanup
-          command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo
+          command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo<< pipeline.parameters.workflow-id >>
 
 workflows:
   app-creation:
