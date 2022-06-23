@@ -151,7 +151,7 @@ jobs:
       - destroy-environment
     
 
-  kubectl-test:
+  kubectl-deployment:
     docker:
       - image: python:3.7.3-stretch
     working_directory: ~/repo
@@ -170,7 +170,8 @@ jobs:
             kubectl create ns eks-deployment
             kubectl apply -f eks-deployment.yaml
             kubectl apply -f eks-service.yaml
-            kubectl get svc -A
+            sleep(60)
+            kubectl get all -n eks-deployment
       - destroy-environment
 
   
@@ -195,7 +196,7 @@ workflows:
           requires: [lint-check]
       - create-cluster:
           requires: [lint-check]
-      - kubectl-test:
+      - kubectl-deployment:
           requires: [create-cluster, docker-build]
-      - cleanup:
-          requires: [kubectl-test]
+      # - cleanup:
+      #     requires: [kubectl-test]
