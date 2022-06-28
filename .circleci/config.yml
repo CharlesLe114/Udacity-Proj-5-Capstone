@@ -192,12 +192,12 @@ jobs:
 workflows:
   app-creation:
     jobs:
-      # - lint-check
-      # - docker-build:
-      #     requires: [lint-check]
-      # - create-cluster:
-      #     requires: [lint-check]
-      # - kubectl-deployment:
-      #     requires: [create-cluster, docker-build]
-      - cleanup
+      - lint-check
+      - docker-build:
+          requires: [lint-check]
+      - create-cluster:
+          requires: [lint-check]
+      - kubectl-deployment:
+          requires: [create-cluster, docker-build]
+      # - cleanup
           # requires: [kubectl-test]
