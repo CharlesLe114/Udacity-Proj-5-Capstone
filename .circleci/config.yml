@@ -200,4 +200,4 @@ workflows:
       - kubectl-deployment:
           requires: [create-cluster, docker-build]
       - cleanup:
-          requires: [kubectl-test]
+          requires: [kubectl-deployment]
