@@ -199,5 +199,5 @@ workflows:
           requires: [lint-check]
       - kubectl-deployment:
           requires: [create-cluster, docker-build]
-      # - cleanup
-          # requires: [kubectl-test]
+      - cleanup:
+          requires: [kubectl-test]
