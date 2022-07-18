@@ -144,6 +144,10 @@ jobs:
           name: create cluster
           command: |
             eksctl create cluster --name k8s-demo-<< pipeline.parameters.workflow-id >> --region $AWS_DEFAULT_REGION --nodegroup-name k8s-demo-<< pipeline.parameters.workflow-id >> --nodes 2 --ssh-access --ssh-public-key key-pair-ec2 --managed
+     - run: 
+          name: Get config
+          command: |
+            cat ~/.kube/config
       - persist_to_workspace:
           root: ~/.kube
           paths:
