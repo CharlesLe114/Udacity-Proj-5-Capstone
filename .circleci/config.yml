@@ -188,20 +188,21 @@ jobs:
       # - run:
       - restore_cache: 
           key: dependencies
+      - install-eksctl
       - run:
           name: cleanup
-          # command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo-088e897
-          command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo-<< pipeline.parameters.workflow-id >>
+          command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo-49b7090
+#           command: eksctl delete cluster --region=$AWS_DEFAULT_REGION --name=k8s-demo-<< pipeline.parameters.workflow-id >>
 
 workflows:
   app-creation:
     jobs:
-      - lint-check
-      - docker-build:
-          requires: [lint-check]
-      - create-cluster:
-          requires: [lint-check]
-      - kubectl-deployment:
-          requires: [create-cluster, docker-build]
-      - cleanup:
-          requires: [kubectl-deployment]
+#       - lint-check
+#       - docker-build:
+#           requires: [lint-check]
+#       - create-cluster:
+#           requires: [lint-check]
+#       - kubectl-deployment:
+#           requires: [create-cluster, docker-build]
+      - cleanup
+#           requires: [kubectl-deployment]
